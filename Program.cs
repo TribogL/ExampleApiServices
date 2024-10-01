@@ -18,7 +18,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseAuthorization();
+
+app.UseWelcomePage( new WelcomePageOptions
+{
+    Path = "/"
+});
 
 app.MapControllers();
 
