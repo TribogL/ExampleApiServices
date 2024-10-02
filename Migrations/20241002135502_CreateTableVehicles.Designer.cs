@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExampleApiServices.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241001132833_CreateTableVehicles")]
+    [Migration("20241002135502_CreateTableVehicles")]
     partial class CreateTableVehicles
     {
         /// <inheritdoc />
