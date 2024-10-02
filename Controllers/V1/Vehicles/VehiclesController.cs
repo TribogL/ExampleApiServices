@@ -24,18 +24,26 @@ public class VehiclesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Vehicle>>> GetAll()
     {
-        return await _context.vehicles.ToListAsync();
+        return await _context.Vehicles.ToListAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Vehicle>> GetById(int id)
     {
-        var Vehicle = await _context.vehicles.FindAsync(id);
+        var Vehicle = await _context.Vehicles.FindAsync(id);
         if(Vehicle == null)
         {
             return NotFound();
         }
         return Vehicle;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Vehicle>> Create(Vehicle vehicle)
+    {
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetById), new {id = vehicle.Id}, vehicle);
     }
 
 }
