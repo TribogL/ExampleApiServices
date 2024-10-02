@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ExampleApiServices.Data;
+using ExampleApiServices.DTOs;
 using ExampleApiServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,11 +40,18 @@ public class VehiclesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Vehicle>> Create(Vehicle vehicle)
+    public async Task<ActionResult<Vehicle>> Create(VehicleDTO vehicle)
     {
-        _context.Vehicles.Add(vehicle);
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var  newVehicle = new Vehicle(vehicle.Make, vehicle.Model, vehicle.Year, vehicle.Price, vehicle.Color);
+
+        _context.Vehicles.Add(newVehicle);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new {id = vehicle.Id}, vehicle);
+        return CreatedAtAction(nameof(GetById), new {id = newVehicle.Id}, vehicle);
     }
 
 }
