@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ExampleApiServices.Models;
-[Table("vehivles")]
+[Table("vehicles")]
 public class Vehicle
 {
     [Key]
