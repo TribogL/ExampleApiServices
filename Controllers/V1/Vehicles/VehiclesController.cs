@@ -40,18 +40,18 @@ public class VehiclesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Vehicle>> Create(VehicleDTO vehicle)
+    public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputvehicle)
     {
         if(!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var  newVehicle = new Vehicle(vehicle.Make, vehicle.Model, vehicle.Year, vehicle.Price, vehicle.Color);
+        var  newVehicle = new Vehicle(inputvehicle.Make, inputvehicle.Model, inputvehicle.Year, inputvehicle.Price, inputvehicle.Color);
 
         _context.Vehicles.Add(newVehicle);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new {id = newVehicle.Id}, vehicle);
+        return CreatedAtAction(nameof(GetById), new {id = newVehicle.Id}, inputvehicle);
     }
 
 }
