@@ -39,6 +39,14 @@ public class VehiclesController : ControllerBase
         return Vehicle;
     }
 
+    [HttpGet("{id}/exists")]
+
+    public async Task<ActionResult<bool>> Exists(int id)
+    {
+        var exists = await _context.Vehicles.AnyAsync(v => v.Id == id);
+        return Ok(exists);
+    }
+    
     [HttpPost]
     public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputvehicle)
     {
@@ -93,14 +101,6 @@ public class VehiclesController : ControllerBase
         _context.Vehicles.Remove(Vehicle);
         await _context.SaveChangesAsync();
         return NoContent();
-    }
-
-    [HttpGet("{id}/exists")]
-
-    public async Task<ActionResult<bool>> Exists(int id)
-    {
-        var exists = await _context.Vehicles.AnyAsync(v => v.Id == id);
-        return Ok(exists);
     }
 
 }
