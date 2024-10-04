@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ExampleApiServices.Data;
+
 using ExampleApiServices.DTOs;
 using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;

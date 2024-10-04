@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using ExampleApiServices.Data;
-using ExampleApiServices.DTOs;
+
 using ExampleApiServices.Models;
 using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 [ApiController]
