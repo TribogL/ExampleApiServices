@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExampleApiServices.Data;
 using ExampleApiServices.Models;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
@@ -12,24 +13,25 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 public class VehicleDeleteController : ControllerBase
 {
 
-    private readonly ApplicationDbContext _context;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public VehicleDeleteController(ApplicationDbContext context)
+    public VehicleDeleteController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
-    }  
-    
+        _vehicleRepository = vehicleRepository;
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<Vehicle>> Delete(int id)
     {
-        var Vehicle = await _context.Vehicles.FindAsync(id);
-        if (Vehicle == null)
+        var Vehicle = await _vehicleRepository.CheckExistence(id);
+        if (Vehicle == false)
         {
             return NotFound();
         }
-        _context.Vehicles.Remove(Vehicle);
-        await _context.SaveChangesAsync();
+
+        await _vehicleRepository.Delete(id);
+
         return NoContent();
     }
-    
+
 }

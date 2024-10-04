@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ExampleApiServices.Data;
 using ExampleApiServices.DTOs;
 using ExampleApiServices.Models;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
@@ -13,12 +14,12 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 public class VehicleCreateController : ControllerBase
 {
 
-  private readonly ApplicationDbContext _context;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public VehicleCreateController(ApplicationDbContext context)
+    public VehicleCreateController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
-    }  
+        _vehicleRepository = vehicleRepository;
+    }
 
     [HttpPost]
     public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputvehicle)
@@ -30,10 +31,11 @@ public class VehicleCreateController : ControllerBase
 
         var newVehicle = new Vehicle(inputvehicle.Make, inputvehicle.Model, inputvehicle.Year, inputvehicle.Price, inputvehicle.Color);
 
-        _context.Vehicles.Add(newVehicle);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(Create), new { id = newVehicle.Id }, inputvehicle);
+
+      await _vehicleRepository.Add(newVehicle);
+
+      return Ok(newVehicle);
     }
-    
+
 
 }
