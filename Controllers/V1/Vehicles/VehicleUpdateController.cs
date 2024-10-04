@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExampleApiServices.Data;
 using ExampleApiServices.DTOs;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
@@ -12,38 +13,40 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 public class VehicleUpdateController : ControllerBase
 {
 
-    private readonly ApplicationDbContext _context;
+     private readonly IVehicleRepository _vehicleRepository;
 
-    public VehicleUpdateController(ApplicationDbContext context)
+    public VehicleUpdateController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
+        _vehicleRepository = vehicleRepository;
     }
 
-    [HttpPut("{id}")]
-
-    public async Task<IActionResult> Update(int id, VehicleDTO updateVehicle)
+      [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, VehicleDTO updatedVehicle)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
-
-        var Vehicle = await _context.Vehicles.FindAsync(id);
-        if (Vehicle == null)
+        var checkVehicle = await _vehicleRepository.CheckExistence(id);
+        if (checkVehicle == false)
         {
             return NotFound();
         }
-        Vehicle.Make = updateVehicle.Make;
-        Vehicle.Model = updateVehicle.Model;
-        Vehicle.Year = updateVehicle.Year;
-        Vehicle.Price = updateVehicle.Price;
-        Vehicle.Color = updateVehicle.Color;
 
-        _context.Vehicles.Update(Vehicle);
-        await _context.SaveChangesAsync();
+        var vehicle = await _vehicleRepository.GetById(id);
 
+        if (vehicle == null)
+        {
+            return NotFound();
+        }
+
+        vehicle.Make = updatedVehicle.Make;
+        vehicle.Model = updatedVehicle.Model;
+        vehicle.Year = updatedVehicle.Year;
+        vehicle.Price = updatedVehicle.Price;
+        vehicle.Color = updatedVehicle.Color;
+
+        await _vehicleRepository.Update(vehicle);
         return NoContent();
-
     }
-
 }
