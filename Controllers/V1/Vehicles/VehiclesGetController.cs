@@ -6,15 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 [ApiController]
 [Route("api/v1/[controller]")]
-public class VehiclesGetController : ControllerBase
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
+public class VehiclesGetController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehiclesGetController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Vehicle>>> GetAll()
     {

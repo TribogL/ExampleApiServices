@@ -6,15 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 [ApiController]
 [Route("api/v1/[controller]")]
-public class VehicleUpdateController : ControllerBase
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
+public class VehicleUpdateController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-
-     private readonly IVehicleRepository _vehicleRepository;
-
-    public VehicleUpdateController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
 
       [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, VehicleDTO updatedVehicle)

@@ -6,15 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 [ApiController]
 [Route("api/v1/[controller]")]
-public class VehicleDeleteController : ControllerBase
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
+public class VehicleDeleteController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehicleDeleteController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<Vehicle>> Delete(int id)

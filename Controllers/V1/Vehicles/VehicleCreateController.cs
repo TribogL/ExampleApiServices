@@ -7,15 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 [ApiController]
 [Route("api/v1/[controller]")]
-public class VehicleCreateController : ControllerBase
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
+public class VehiclesCreateController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehicleCreateController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
 
     [HttpPost]
     public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputvehicle)
